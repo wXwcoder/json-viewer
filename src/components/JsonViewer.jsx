@@ -47,7 +47,16 @@ function JsonViewer({ data, depth = 0 }) {
                 </div>
               ))}
             </div>
-          ) : value.length > 0 ? '...' : ''}
+          ) : (
+            <span className="collapsed-content">
+              {value.map((item, index) => (
+                <span key={index}>
+                  <JsonViewer data={item} depth={depth + 1} />
+                  {index < value.length - 1 && '}, '}
+                </span>
+              ))}
+            </span>
+          )}
           ]
         </div>
       )
@@ -62,7 +71,7 @@ function JsonViewer({ data, depth = 0 }) {
             className="toggle" 
             onClick={() => toggleExpand(key)}
           >
-            {isExpanded ? '−' : '+'}
+            {isExpanded ? '−{' : '+{'}
           </span>
           {isExpanded ? (
             <div className="nested">
@@ -74,7 +83,17 @@ function JsonViewer({ data, depth = 0 }) {
                 </div>
               ))}
             </div>
-          ) : keys.length > 0 ? '...' : ''}
+          ) : (
+            <span className="collapsed-content">
+              {keys.map((k, index) => (
+                <span key={k}>
+                  <span className="json-key">"{k}"</span>: 
+                  <JsonViewer data={value[k]} depth={depth + 1} />
+                  {index < keys.length - 1 && ', '}
+                </span>
+              ))}
+            </span>
+          )}
         </div>
       )
     }

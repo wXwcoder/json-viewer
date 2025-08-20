@@ -8,7 +8,12 @@ function App() {
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   const removeEscapes = (str) => {
-    return str.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    // 移除开头和结尾的引号（如果存在）
+    let cleaned = str.trim()
+    if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+      cleaned = cleaned.slice(1, -1)
+    }
+    return cleaned.replace(/\\"/g, '"').replace(/\\\\/g, '\\')
   }
 
   const handleDataSubmit = (data) => {
