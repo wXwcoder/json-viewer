@@ -1,0 +1,73 @@
+# This workflow will build a React + Go project for multiple platforms
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Build JSON Viewer
+
+on:
+  push:
+    branches: [ "v0.1.0" ]
+  pull_request:
+    branches: [ "v0.1.0" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build React app
+      run: npm run build
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Build executable for Linux
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        go build -o JsonViewer-linux main.go
+        chmod +x JsonViewer-linux
+
+    - name: Build executable for Windows
+      if: matrix.os == 'windows-latest'
+      run: go build -o JsonViewer-windows.exe main.go
+
+    - name: Build executable for macOS
+      if: matrix.os == 'macos-latest'
+      run: |
+        go build -o JsonViewer-macos main.go
+        chmod +x JsonViewer-macos
+
+    - name: Upload Linux artifact
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v3
+      with:
+        name: JsonViewer-linux
+        path: JsonViewer-linux
+
+    - name: Upload Windows artifact
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v3
+      with:
+        name: JsonViewer-windows.exe
+        path: JsonViewer-windows.exe
+
+    - name: Upload macOS artifact
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v3
+      with:
+        name: JsonViewer-macos
+        path: JsonViewer-macos
