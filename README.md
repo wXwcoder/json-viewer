@@ -71,16 +71,6 @@ npm run build-macos
 - **Linux**: `JsonViewer` - Shell脚本
 - **macOS**: `JsonViewer` - Shell脚本
 
-### 使用方法
-
-1. 首先运行 `npm run build` 构建React项目
-2. 然后运行相应的构建命令生成可执行文件
-3. 在命令行中执行可执行文件：
-   - Windows: `.\JsonViewer.bat`
-   - 或者直接双击 `JsonViewer.bat` 文件
-
-注意：在PowerShell中执行批处理文件需要使用相对路径前缀
-
 ### 使用Gin框架部署
 
 1. 首先构建React项目：
@@ -107,7 +97,7 @@ go run main.go
 项目现在支持使用Go 1.16+的embed功能将静态文件直接嵌入可执行文件中：
 
 - 无需外部`dist`目录，所有静态资源都包含在单一可执行文件中
-- 使用`//go:embed dist-/*`指令嵌入构建后的静态文件
+- 使用`//go:embed dist/*`指令嵌入构建后的静态文件
 - 支持跨平台自动打开浏览器功能（Windows、macOS、Linux）
 - 部署更加简单，只需分发单个可执行文件
 
@@ -136,7 +126,6 @@ GOOS=darwin GOARCH=amd64 go build -o JsonViewer
 - 支持真正的跨平台可执行文件
 - 内置端口8080，可通过修改main.go更改
 - 自动打开浏览器访问应用（支持Windows、macOS、Linux）
-- 使用Go语言编写构建脚本 (`build.go`)
 - 自动检测操作系统类型
 - 生成平台特定的启动脚本
 - 支持跨平台构建## 项目结构
@@ -150,7 +139,6 @@ jsonview/
 │   ├── App.jsx
 │   ├── main.jsx
 │   └── styles.css
-├── build.go
 ├── package.json
 ├── vite.config.js
 └── index.html
